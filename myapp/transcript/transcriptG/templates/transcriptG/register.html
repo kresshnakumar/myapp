@@ -1,0 +1,61 @@
+<html>
+    <head>
+        <script src ="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <title>Registration form</title>
+    </head>
+    <body  background = "/static/transcriptG/images/background1.jpg">
+        <div align = "center"><img src = "/static/transcriptG/images/msitlogo1.jpg" height = "15%" width = "30%"></div>
+        <h1 align = "center">Registration form</h1>
+        <form>
+            <div align = "center">First name: <input type = "text" id = "fn"><br>
+                <br>
+                Last name: <input type = "text" id = "ln"><br>
+                <br>
+                Email id: <input type = "text" id = "email"><br>
+                <br>
+                Password: <input type = "password" id = "p"><br>
+                <br>
+                Re-enter Password: <input type = "password" id = "rp"><br>
+                <br>
+                UserType:
+                <select id="tou">
+                    <option value = "--select--">--select--</option>
+                    <option value = "admin">admin</option>
+                    <option value = "user">user</option>    
+                </select><br>
+                <br>
+                <input type = "submit" value="SUBMIT" onclick="validate()">
+            </div>
+        </form>
+        <script>
+            function validate() {
+                // 
+                var e = document.getElementById("tou");
+                var u = e.options[e.selectedIndex].value;
+                $.ajax({
+                    url:"/transcriptG/validate/",
+                    type :"GET",
+                    data: {First_name:$("#fn").val(),
+                           Last_name:$("#ln").val(),
+                           EmailId:$("#email").val(),
+                           password:$("#p").val(),
+                           UserType:$u,
+                    },
+                    success : function(json) {
+                        //alert("hiii");
+                        console.log(json);
+                        $("#fn").val('');
+                        $("#ln").val('');
+                        $("#email").val('');
+                        $("#p").val('');
+                        //$("#tou").val('');
+                    },
+                    error: function(xhr,errmsg,err) {
+                        $('#results').html("<div class = 'alert-box alert radius' data-alert> Oops! we have encounterd an error:" +errmsg+"<a href ='#' class ='close'> &times;</a></div>");
+                        console.log(xhr.status+": "+xhr.responseText);
+                    }
+                });
+            };
+        </script> 
+    </body>
+</html>
